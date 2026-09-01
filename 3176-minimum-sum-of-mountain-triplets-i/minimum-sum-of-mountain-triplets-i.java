@@ -1,17 +1,23 @@
 class Solution {
     public int minimumSum(int[] nums) {
-        int minMountainSum = -1;
-        int n =  nums.length ;
-        for(int i = 0 ; i <n ;i++ )
-        for(int j = i+1 ; j <n;j++)
-        for (int k =j+1 ; k<n ; k++){
-            if((nums[i]<nums[j])&&(nums[j]>nums[k])) {
-                int sum = nums[i]+nums[j]+nums[k];
-
-                minMountainSum =(minMountainSum == -1)?sum:Math.min(sum,minMountainSum);
-            }
-
+        int n =  nums.length ; 
+        int leftMin [] = new int[n];
+        int rightMin [] = new int[n];
+        leftMin[0] = Integer.MAX_VALUE ;
+        rightMin[n-1] = Integer.MAX_VALUE;
+        for(int i = 1 ; i < n ; i++){
+            leftMin[i] = Math.min(leftMin[i-1],nums[i-1]);
         }
-        return minMountainSum;
+        for(int i = n-2 ; i > -1 ; i--){
+            rightMin[i] = Math.min(rightMin[i+1],nums[i+1]);
+        }
+        int ans = Integer.MAX_VALUE;
+
+        for (int j = 1; j < n - 1; j++) {
+            if (leftMin[j] < nums[j] && rightMin[j] < nums[j]) {
+                ans = Math.min(ans, leftMin[j] + nums[j] + rightMin[j]);
+            }
+        }
+        return ans == Integer.MAX_VALUE ? -1 : ans;
     }
 }
